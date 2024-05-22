@@ -5,7 +5,7 @@ from django.utils import timezone
 class Author(models.Model):
     name = models.CharField(max_length=80, default='Unknown', help_text="Author's name")
     country = models.CharField(max_length=150, default='Unknown', help_text="Author's address")
-    age = models.IntegerField(max_length=100, help_text="Author's age")
+    age = models.IntegerField(help_text="Author's age")
    
     
     def __str__(self) -> str:
@@ -28,7 +28,7 @@ class Book(models.Model):
     description = models.TextField(help_text="Book's detailed description")
     category = models.CharField(max_length=2, choices=Category.choices) 
     available = models.IntegerField(help_text='Books available to take', null=False)
-    pub_date = models.DateTimeField(help_text="Date when book was published", null=False)
+    pub_date = models.DateField(help_text="Date when book was published", null=False)
     edited = models.DateTimeField(auto_now_add=True, help_text="Date when the book was edited")
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='library_book')
     
@@ -42,7 +42,7 @@ class Book(models.Model):
         ]
     
     def __str__(self) -> str:
-        return f'title: {self.title} description:{self.description[:30]}'
+        return f'title: {self.title} description:{self.description[:30]}....'
     
 
 class Customer(models.Model):
