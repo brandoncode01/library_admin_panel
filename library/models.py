@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
 
 
 class Author(models.Model):
@@ -65,13 +66,41 @@ class CustomerBook(models.Model):
     book = models.ForeignKey(Book, help_text="Book ID", on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, help_text="Customer Id", on_delete=models.CASCADE)
     borrowed = models.DateTimeField(auto_now=True, help_text="Date time when the book was taken by the customer")
-    returned = models.DateTimeField(default="not delivered", help_text="Date time when book was returned by the customer")
+    returned = models.DateTimeField(null=True, blank=True, default=None, help_text="Date time when book was returned by the customer")
     
     # Create save custom handling to only record books from customer that have memebership
     def save(self, *args, **kargs):
-        if self.customer.memebership.day - timezone.now().day > 30 :
-            raise Exception("Only customers with membership can take books")
+        """
+            There are two possible cases
+            1- Object is created
+            2- Object is updated
+            When object is created can have returned then increase available book of intance by 1
+            but if object is created but is not returned yet then decrease a vailable books
+            
+            When object already exists but the instance is updated for example customer but the book
+            is already returned then do not decrease or increase
+            but if the object already exists and is returned increase books by 1
+            
+        """
         
+        from_date = self.customer.membership
+        to_date = timezone.now()
+        result = to_date - from_date
+        
+        exists = CustomerBook.objects.filter(id=self.id).first()
+        
+        if not exists or exists.book.id != self.book.id:
+            if result.days > 30:
+                raise Exception("Only customers with membership can take books")
+            
+            if not self.returned or exists.book.id != self.book.id: # since book is taken and not returned yet
+               self.book.available -= 1 
+        else:
+            if self.returned != None and exists.returned == None \
+            or self.book.id != exists.book.id and exists.returned == None: # the book is returned
+                self.book.available += 1
+                   
+               
         super().save(*args, **kargs)
         
     
@@ -81,4 +110,4 @@ class CustomerBook(models.Model):
         ]
         
     def __str__(self) -> str:
-        return f'The book {self.book} was borrowed {self.borrowed} and returned {self.returned}'
+        return f'The book {self.book} was borrowed {self.borrowed} to {self.customer} and returned {self.returned}'
