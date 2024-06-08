@@ -10,7 +10,7 @@ class TestAuthor(TestCase):
     def setUp(self):
         Author.objects.create(name='Zane Gray', country='United States', age=47)
         Author.objects.create(name='R.L Stine', country='England', age=60)
-        Author.objects.create(name='James Morton', country='Canda', age=40)
+        Author.objects.create(name='James Morton', country='Canada', age=40)
         
         
     def test_authors_list(self):
@@ -19,13 +19,13 @@ class TestAuthor(TestCase):
         for author in authors:
             print(author)
             
-        print("Insertion database was sucessfully")
+        print("Insertion database was successfully")
 
 class TestBook(TestCase):
     def setUp(self):
         Author.objects.create(name='Zane Gray', country='United States', age=47)  
         Author.objects.create(name='R.L Stine', country='England', age=60)        
-        Author.objects.create(name='James Morton', country='Canda', age=40)      
+        Author.objects.create(name='James Morton', country='Canada', age=40)      
                                                                                        
     def test_books(self):
         authors = Author.objects.all()
@@ -82,7 +82,7 @@ class TestBook(TestCase):
             print(book)
             
             
-        print("Books where inserted succesfully")
+        print("Books where inserted successfully")
 
 
 class TestCustomer(TestCase):
@@ -99,7 +99,7 @@ class TestCustomer(TestCase):
         for customer in customers:
             print(customer)
         
-        print("Customers created sucessfully")
+        print("Customers created successfully")
         
 
 class TestCustomerBook(TestCase):
@@ -108,7 +108,7 @@ class TestCustomerBook(TestCase):
         Customer.objects.create(username='jane_smith', email='jane.smith@example.com', membership=datetime.now(tz=pytz.UTC))
         Author.objects.create(name='Zane Gray', country='United States', age=47)  
         Author.objects.create(name='R.L Stine', country='England', age=60)        
-        Author.objects.create(name='James Morton', country='Canda', age=40)
+        Author.objects.create(name='James Morton', country='Canada', age=40)
         authors = Author.objects.all()
         Book.objects.create(
             title="Whispers of the Forest",
@@ -155,9 +155,9 @@ class TestCustomerBook(TestCase):
         for book in borrowed_books:
             print(book)
             
-        print("Test for borrowed books runned sucessfully")
+        print("Test for borrowed books ran successfully")
     
-    def test_outdated_memebeship(self):
+    def test_outdated_membeship(self):
         book1 = Book.objects.get(id=2)
         customer = Customer.objects.get(id=1)
         customer_book1 = CustomerBook(book=book1,

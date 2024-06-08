@@ -10,7 +10,7 @@ class Author(models.Model):
    
     
     def __str__(self) -> str:
-        return f'Author: {self.name}'
+        return f'{self.name}'
 
 
 
@@ -25,7 +25,7 @@ class Book(models.Model):
         Comedy = 'CM', 'Comedy'
     
     title = models.CharField(max_length=120, help_text="Book's title", null=False)
-    ISBN = models.CharField(max_length=250, help_text="Book's ISBN", null=False)
+    ISBN = models.CharField(max_length=250, help_text="Book's ISBN", null=False, unique=True)
     description = models.TextField(help_text="Book's detailed description")
     category = models.CharField(max_length=2, choices=Category.choices) 
     available = models.IntegerField(help_text='Books available to take', null=False)
