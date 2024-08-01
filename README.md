@@ -1,6 +1,6 @@
 # Library manage by Django admin site
 
-This library project is managed solely through the Django admin site. It does not contain any views and showcases how to implement advanced features built into the Django admin site.
+This library project is managed only through the Django admin site. It does not contain any views and showcases how to implement advanced features built into the Django admin site.
 
 ## Content
 
